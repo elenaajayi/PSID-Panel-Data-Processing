@@ -112,7 +112,7 @@ psid-panel-data/
 1. **Clone the repository**:
 
 ```bash
-git clone https://github.com/yourusername/psid-panel-data.git
+git clone https://github.com/yourusername/psid-panel-data-processing.git
 cd psid-panel-data
 ```
 
