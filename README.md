@@ -4,7 +4,7 @@
 
 This repository provides a reproducible workflow for preparing and analyzing family-level data from the **Panel Study of Income Dynamics (PSID)** across five waves: **2015, 2017, 2019, 2021, and 2023**. It integrates data cleaning, ER code harmonization, and variable labeling to construct a clean panel dataset in both **long** and **wide** formats.
 
-This project was initiated as part of a research collaboration under Dr. [PI Name], and is now being extended into a formal research study under the **CEB Fellowship Proposal**.
+This project was initiated as part of a research collaboration under Dr. Rachel Atkins, and is now being extended into a formal research study under the **CEB Fellowship Proposal**.
 
 ## Project Goals
 
