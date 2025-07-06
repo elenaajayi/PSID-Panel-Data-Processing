@@ -1,13 +1,7 @@
-# PSID-Panel-Data-Processing
-
 ---
-
-````yaml
-# README.Rmd
-
-title: "PSID Panel Data Processing"
-author: "Your Name"
-date: "`r Sys.Date()`"
+title: "PSID Panel Data Processing and CEB Fellowship Integration"
+author: "Elena Ajayi"
+date: "2025-07-06"
 output:
   github_document:
     toc: true
@@ -16,131 +10,89 @@ output:
 ---
 
 # Overview
-This repository provides a complete, reproducible workflow to harmonize, document, and analyze family‑level PSID (Panel Study of Income Dynamics) data across five survey waves (2015, 2017, 2019, 2021, 2023). By the end of this pipeline, you will have:
 
-- A **panel‑long** dataset: one row per family (`ID`) per wave (`year`), with all key variables as columns.
-- Clear documentation of **why** each variable was chosen, including links to their PSID Data Center ER‑codes and conceptual definitions.
-- An R script (`analysis/prepare_data.R`) that reads raw PSID files, selects and renames variables, merges waves, and outputs both wide and long CSVs for analysis.
+This repository provides a reproducible workflow for preparing and analyzing family-level data from the **Panel Study of Income Dynamics (PSID)** across five waves: **2015, 2017, 2019, 2021, and 2023**. It integrates data cleaning, ER code harmonization, and variable labeling to construct a clean panel dataset in both **long** and **wide** formats.
 
-This setup ensures transparency, reproducibility, and ease of collaboration, whether you’re pushing to GitHub or sharing with your PI.
+This project was initiated as part of a research collaboration under Dr. [PI Name], and is now being extended into a formal research study under the **CEB Fellowship Proposal**.
 
-# Variables: Selection & Rationale
-Each variable below was chosen to capture core demographic, wealth, debt, and socioeconomic dimensions at the family level. Whenever an imputed (“IMP …”) version was available, we selected it to maximize completeness and reduce missingness.
+## Project Goals
 
-## 1. Identification & Demographics
+- Create harmonized panel datasets across multiple PSID waves
+- Enable exploratory and descriptive analysis of wealth, debt, and demographic trends
+- Support stimulus-related outcome analysis (e.g., CARES/PPP)
+- Build toward regression models and hypothesis testing framed by CEB proposal research questions
 
-| Friendly name        | ER‑code      | Description                                   |
-|:---------------------|:-------------|:----------------------------------------------|
-| **ID**               | ER78002      | Unique family/unit identifier across waves.   |
-| **Race**             | L40 (ER81144)| Categorical: White, Black, Asian, Other.      |
-| **Hispanic Ethnicity**| L39 (ER81143)| Binary indicator of Hispanic origin.          |
-| **Sex**              | ER78018      | Reference person’s gender.                    |
-| **Age**              | ER78017      | Reference person’s age in years.              |
-| **Marital Status**   | ER78025      | Reference person’s marital status.            |
-| **Children Count**   | ER78021      | Number of children in household.              |
+# Key Outputs
 
-## 2. Wealth & Asset Holdings
-Assets provide insight into household financial security and potential buffers against shocks.
+- ✅ `psid_construct_finAL.pdf`: A cleanly rendered document detailing the panel reshaping pipeline
+- ✅ `psid_analysis.rds` and `.csv`: Wide-format panel dataset ready for regression and summary analysis
+- ✅ Variable-labeled dataset using actual ER codes from PSID labels file
+- ✅ Summary statistics by year for wealth, debt, and demographics
 
-| Concept                        | Indicator ER‑code | Value ER‑code     | Notes                              |
-|:-------------------------------|:------------------|:------------------|:-----------------------------------|
-| **Real Estate**                | W1                | IMP W1_VAL        | Home/property ownership & value.   |
-| **Farm/Business**              | W10               | IMP W11A, IMP W11B| Business/farm assets & debts.      |
-| **Stocks (non‑IRA)**           | W15               | IMP W16           | Indicator + imputed value.         |
-| **Other Assets**               | W33               | IMP W34           | Additional asset classes.          |
-| **Annuities / IRAs**           | W21               | IMP W22           | Pension-like instruments.          |
-| **Wealth Summary**             | —                 | WEALTH1/WEALTH2   | Net worth excl./incl. home equity. |
+# Variable Selection Rationale
 
-## 3. Debt Measures (Imputed Only)
-Debts capture financial liabilities. We always select the **imputed** amount (*IMP …*) over raw or accumulated versions.
+Variables were selected to support core research questions related to:
 
-| Debt Type         | Indicator    | Imputed Value    |
-|:------------------|:-------------|:-----------------|
-| **Credit Card**   | W38A         | IMP W39A          |
-| **Student Loans** | W38B1        | IMP W39B1         |
-| **Medical Debt**  | W38B2        | IMP W39B2         |
-| **Legal Debt**    | W38B3        | IMP W39B3         |
-| **Other Debt**    | W38B7        | IMP W39B7         |
+- **Wealth inequality and business ownership**
+- **Debt and financial vulnerability**
+- **Race, gender, and geography as mediators**
+- **Pandemic impact on financial outcomes**
+- **PPP access and business resilience (planned extension)**
 
-## 4. Liquid Assets & Savings
+Priority was given to imputed versions of variables (`WEALTH1`, `WEALTH2`, etc.) for higher completeness.
 
-| Concept                  | ER‑code                | Description                                   |
-|:-------------------------|:-----------------------|:----------------------------------------------|
-| **Checking/Savings**     | W27A, W28A             | Indicator + imputed year‑end balance.         |
-| **CDs/Bonds/T‑Bills**    | W27, W28               | Indicator + imputed value of time deposits.   |
+# Stimulus and PPP Indicators
 
-## 5. Business & Self‑Employment
+| Concept                 | ER Codes Used                 | Description                          |
+|-------------------------|-------------------------------|--------------------------------------|
+| **CARES Act Stimulus**  | G44B2 (indicator), G45B2 (amt)| 2020 payments to families            |
+| **PPP Loan Receipt**    | G44B3 (indicator), G45B3 (amt)| Receipt and value of PPP loans       |
 
-| Concept                   | ER‑code   | Description                             |
-|:--------------------------|:----------|:----------------------------------------|
-| **Industry Code**         | BC21      | 2-digit SIC industry of main job.       |
-| **Self‑Employment**       | BC22      | Indicator of self-employment status.    |
+# File Structure
 
-## 6. Stimulus & PPP Variables
-
-| Program           | ER‑code                    | Description                               |
-|:------------------|:---------------------------|:------------------------------------------|
-| **Stimulus Payment**| G44B2 (ind), G45B2 (amt) | 2020 CARES Act stimulus received.         |
-| **PPP Loans**       | G44B3 (ind), G45B3 (amt) | Paycheck Protection Program loans.        |
-
-## 7. Time‑Use / Education Module
-
-| Concept                      | ER‑code   | Description                                    |
-|:-----------------------------|:----------|:-----------------------------------------------|
-| **Educational Activity Hours**| F1F       | Hours spent on learning/training by head.      |
-
-## 8. Geography
-
-| Concept                   | ER‑code   | Description                                 |
-|:--------------------------|:----------|:---------------------------------------------|
-| **Metro vs. Nonmetro**    | METRO     | Metro area indicator.                        |
-| **Beale Rural‑Urban Code**| BEALE     | Rural-urban classification.                  |
-
-# Repository Structure
 ```bash
 psid-panel-data/
-├── analysis/                   # Data prep & analysis scripts
-│   └── prepare_data.R          # Main R script to build panel
-├── data/                       # Raw PSID downloads (gitignored)
-├── outputs/                    # Processed outputs
-├── README.Rmd                  # This file
-└── .gitignore                  # Exclude raw data & temp files
-````
-
-# Getting Started
-
-1. **Clone the repository**:
-
-```bash
-git clone https://github.com/yourusername/psid-panel-data-processing.git
-cd psid-panel-data
+├── analysis/                 # All .Rmd and .R scripts
+│   ├── psid_construct.Rmd   # Main panel construction document
+│   ├── ceb_analysis.R       # Placeholder for CEB-specific models
+├── data/                    # Raw Excel files (e.g., 2015_2023.xlsx)
+├── outputs/                 # Cleaned data and PDFs
+├── README.Rmd               # This README
+├── .gitignore               # Excludes sensitive or large files
 ```
 
-2. **Place raw data** (`.sas7bdat` & `.xlsx`) in `/data`.
+# How to Reproduce
 
-3. **Install dependencies** in R:
+1. Clone the repo:
+
+```bash
+git clone https://github.com/yourusername/psid-panel-data.git
+```
+
+2. Install R dependencies:
 
 ```r
-install.packages(c("sas7bdat","readxl","haven","dplyr","tidyr","purrr"))
+install.packages(c("dplyr", "tidyr", "readxl", "stringr", "purrr", "scales", "ggplot2"))
 ```
 
-4. **Run the prep script**:
+3. Load your Excel file (named `2015_2017_2019_2021_2023.xlsx`) into the `/data` folder.
 
-```bash
-Rscript analysis/prepare_data.R
-```
+4. Knit `psid_construct.Rmd` or run the associated `.R` script to generate:
+   - A long-format tibble (`psid_long`)
+   - A wide-format dataset (`psid_analysis`)
 
-5. **Inspect outputs** in `/outputs`:
+# Next Steps: CEB Fellowship
 
-* `panel_wide.csv`: one row per family per year.
-* `panel_long.csv`: tidy format (`ID`,`year`,`variable`,`value`).
+The immediate next steps will involve extending this pipeline to:
 
-# Next Steps & Analysis
+- 🧮 Answer research questions specified in the CEB Fellowship Proposal (see `Atkins Proposal for CEB Fellowship.pdf`)
+- 📈 Generate race-stratified regression models and Difference-in-Differences (DiD) analyses
+- 📊 Integrate visualization and robustness checks for business ownership, PPP effects, and wealth recovery
 
-* Use `panel_wide.csv` for panel regressions.
-* Use `panel_long.csv` for dynamic event-study plots.
+I will continue committing to this repository as I finalize the analysis and draft the results for the fellowship.
 
-# License & Contact
+# Contact & Licensing
 
-**Author:** Your Name (`elena.ajayi19l@stjohns.edu`)
-**License:** CC BY-NC 4.0
+**Author:** Elena Ajayi  
+**Contact:** elena.ajayi19l@stjohns.edu  
+**License:** CC BY-NC 4.0  
