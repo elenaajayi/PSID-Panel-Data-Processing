@@ -84,6 +84,6 @@ I will continue committing to this repository as I finalize the analysis and dra
 
 # Contact & Licensing
 
-**Author:** Elena Ajayi  
+**Author:** Elena Ajayi  & Dr. Rachel Atkins
 **Contact:** elena.ajayi19l@stjohns.edu  
-**License:** CC BY-NC 4.0  
+
