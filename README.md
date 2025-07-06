@@ -1,13 +1,4 @@
----
-title: "PSID Panel Data Processing and CEB Fellowship Integration"
-author: "Elena Ajayi"
-date: "2025-07-06"
-output:
-  github_document:
-    toc: true
-    toc_depth: 3
-    df_print: paged
----
+
 
 # Overview
 
@@ -85,7 +76,7 @@ install.packages(c("dplyr", "tidyr", "readxl", "stringr", "purrr", "scales", "gg
 
 The immediate next steps will involve extending this pipeline to:
 
-- 🧮 Answer research questions specified in the CEB Fellowship Proposal (see `Atkins Proposal for CEB Fellowship.pdf`)
+- 🧮 Answer research questions specified in the Research Proposal
 - 📈 Generate race-stratified regression models and Difference-in-Differences (DiD) analyses
 - 📊 Integrate visualization and robustness checks for business ownership, PPP effects, and wealth recovery
 
