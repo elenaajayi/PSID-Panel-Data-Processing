@@ -44,9 +44,9 @@ Priority was given to imputed versions of variables (`WEALTH1`, `WEALTH2`, etc.)
 ```bash
 psid-panel-data/
 ├── analysis/                 # All .Rmd and .R scripts
-│   ├── psid_construct.Rmd   # Main panel construction document
+│   ├── psid_construct_final.Rmd   # Main panel construction document
 │   ├── ceb_analysis.R       # Placeholder for CEB-specific models
-├── data/                    # Raw Excel files (e.g., 2015_2023.xlsx)
+├── data/                    # Raw Excel files (e.g., 2015_2023.xlsx, stimulus_2021, etc)
 ├── outputs/                 # Cleaned data and PDFs
 ├── README.Rmd               # This README
 ├── .gitignore               # Excludes sensitive or large files
